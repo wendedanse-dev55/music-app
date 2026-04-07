@@ -6,7 +6,10 @@ import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const YT_DLP_PATH = resolve(__dirname, 'yt-dlp.exe');
+// Use yt-dlp from PATH on Linux, or local exe on Windows
+const YT_DLP_PATH = process.platform === 'win32'
+  ? resolve(__dirname, 'yt-dlp.exe')
+  : 'yt-dlp';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
