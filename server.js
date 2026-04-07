@@ -10,6 +10,9 @@ const YT_DLP_PATH = resolve(__dirname, 'yt-dlp.exe');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+const BASE_URL = process.env.RAILWAY_PUBLIC_DOMAIN
+  ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`
+  : `http://localhost:${PORT}`;
 
 app.use(cors({
   origin: [
@@ -59,7 +62,7 @@ app.get('/api/search', async (req, res) => {
       id: video.videoId,
       title: video.title,
       artist: video.author.name,
-      url: `http://localhost:${PORT}/api/stream/${video.videoId}`,
+      url: `${BASE_URL}/api/stream/${video.videoId}`,
       coverUrl: video.thumbnail,
       duration: video.seconds
     }));
