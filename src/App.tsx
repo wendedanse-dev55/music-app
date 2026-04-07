@@ -3,7 +3,7 @@ import WebApp from '@twa-dev/sdk';
 import { useMusicStore } from './store';
 import Search from './components/Search';
 import Library from './components/Library';
-import PlayerYT from './components/PlayerYT';
+import Player from './components/Player';
 import { Search as SearchIcon, Library as LibraryIcon } from 'lucide-react';
 import './App.css';
 
@@ -88,7 +88,7 @@ function App() {
       </main>
 
       {/* Global Player anchored to bottom */}
-      <PlayerYT />
+      <Player />
     </>
   );
 }

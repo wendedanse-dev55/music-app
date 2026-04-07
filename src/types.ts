@@ -7,6 +7,7 @@ export interface Track {
   duration?: number;
   folderId?: string | null;
   isOffline?: boolean;
+  source?: 'soundcloud' | 'youtube';
 }
 
 export interface Folder {
