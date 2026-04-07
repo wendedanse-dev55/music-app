@@ -51,8 +51,8 @@ export default function Player() {
 
       // Telegram WebApp: предотвращаем закрытие при блокировке
       try {
-        if (window.Telegram?.WebApp) {
-          window.Telegram.WebApp.enableClosingConfirmation();
+        if (typeof window !== 'undefined' && (window as any).Telegram?.WebApp) {
+          (window as any).Telegram.WebApp.enableClosingConfirmation();
         }
       } catch (e) {
         console.warn('Telegram WebApp API not available:', e);

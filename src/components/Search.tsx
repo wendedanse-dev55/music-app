@@ -83,7 +83,7 @@ export default function Search() {
       }
 
       // Combine chunks into blob
-      const blob = new Blob(chunks);
+      const blob = new Blob(chunks as BlobPart[]);
       console.log('Download completed, blob size:', blob.size);
 
       // Save to IndexedDB with blob
