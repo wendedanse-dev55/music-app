@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useMusicStore } from '../store';
 import type { Track } from '../types';
 import { Search as SearchIcon, Download, Play, Check, Loader2 } from 'lucide-react';
+import { API_URL } from '../config';
 
 export default function Search() {
   const [query, setQuery] = useState('');
@@ -22,7 +23,7 @@ export default function Search() {
       setLoading(true);
       try {
         // Вызов нашего кастомного Node.js сервера, который тянет полные треки (аудио-стриминг)
-        const response = await fetch(`http://localhost:3001/api/search?q=${encodeURIComponent(query)}`);
+        const response = await fetch(`${API_URL}/api/search?q=${encodeURIComponent(query)}`);
 
         if (!response.ok) throw new Error('Network error');
 
@@ -47,7 +48,7 @@ export default function Search() {
       const videoId = track.url.split('/').pop();
       if (!videoId) throw new Error('Invalid track URL');
 
-      const downloadUrl = `http://localhost:3001/api/download/${videoId}`;
+      const downloadUrl = `${API_URL}/api/download/${videoId}`;
 
       // Fetch with progress tracking
       const response = await fetch(downloadUrl);

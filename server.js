@@ -11,7 +11,16 @@ const YT_DLP_PATH = resolve(__dirname, 'yt-dlp.exe');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-app.use(cors());
+app.use(cors({
+  origin: [
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'https://web.telegram.org',
+    /\.vercel\.app$/,
+    /\.railway\.app$/
+  ],
+  credentials: true
+}));
 
 // Кэш прямых ссылок, чтобы не дёргать yt-dlp каждый раз
 const urlCache = new Map();

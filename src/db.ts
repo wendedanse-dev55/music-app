@@ -1,5 +1,6 @@
 import localforage from 'localforage';
 import type { Track } from './types';
+import { API_URL } from './config';
 
 // Initialize core storage instances
 const audioDB = localforage.createInstance({
@@ -31,7 +32,7 @@ export async function downloadAndSaveTrack(track: Track, folderId?: string | nul
       }
 
       // Use download endpoint instead of stream to avoid CORS issues
-      const downloadUrl = `http://localhost:3001/api/download/${videoId}`;
+      const downloadUrl = `${API_URL}/api/download/${videoId}`;
       console.log('Downloading from:', downloadUrl);
 
       // 1. Fetch the audio data as a Blob
