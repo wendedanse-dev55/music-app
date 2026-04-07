@@ -1,15 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import ytSearch from 'yt-search';
-import { execFile } from 'child_process';
-import { resolve, dirname } from 'path';
-import { fileURLToPath } from 'url';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-// Use yt-dlp from PATH on Linux, or local exe on Windows
-const YT_DLP_PATH = process.platform === 'win32'
-  ? resolve(__dirname, 'yt-dlp.exe')
-  : 'yt-dlp';
+import ytdl from 'ytdl-core';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -28,26 +20,30 @@ app.use(cors({
   credentials: true
 }));
 
-// Кэш прямых ссылок, чтобы не дёргать yt-dlp каждый раз
+// Кэш прямых ссылок
 const urlCache = new Map();
 
-function getDirectAudioUrl(videoId) {
-  return new Promise((resolve, reject) => {
+async function getDirectAudioUrl(videoId) {
+  try {
     const url = `https://www.youtube.com/watch?v=${videoId}`;
-    // Получаем прямую ссылку на лучший аудио-формат
-    execFile(YT_DLP_PATH, [
-      '-f', 'bestaudio',
-      '--get-url',
-      '--no-playlist',
-      url
-    ], { timeout: 15000 }, (error, stdout, stderr) => {
-      if (error) {
-        console.error('yt-dlp error:', stderr);
-        return reject(error);
-      }
-      resolve(stdout.trim());
+    const info = await ytdl.getInfo(url);
+
+    // Получаем лучший аудио формат
+    const audioFormats = ytdl.filterFormats(info.formats, 'audioonly');
+    if (audioFormats.length === 0) {
+      throw new Error('No audio formats found');
+    }
+
+    // Выбираем формат с лучшим качеством
+    const bestAudio = audioFormats.reduce((best, format) => {
+      return (format.audioBitrate || 0) > (best.audioBitrate || 0) ? format : best;
     });
-  });
+
+    return bestAudio.url;
+  } catch (error) {
+    console.error('ytdl error:', error.message);
+    throw error;
+  }
 }
 
 // Поиск музыки через YouTube
