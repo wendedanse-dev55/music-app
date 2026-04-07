@@ -1,0 +1,9 @@
+# Nixpacks configuration for backend only
+[phases.setup]
+nixPkgs = ["nodejs", "python3"]
+
+[phases.install]
+cmds = ["npm install --production"]
+
+[start]
+cmd = "node server.js"

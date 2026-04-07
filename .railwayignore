@@ -1,0 +1,10 @@
+# Ignore frontend files for backend deployment
+dist/
+src/
+public/
+index.html
+vite.config.ts
+tsconfig*.json
+eslint.config.js
+*.md
+test-app.html
